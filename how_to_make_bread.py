@@ -4,7 +4,7 @@ from langchain_huggingface import HuggingFaceEndpoint
 
 load_dotenv()
 
-def how_to_make_bread():
+def main():
     api_token = os.getenv("HF_API_KEY")
     if not api_token:
         print("HF_API_KEY not found in environment variables.")
@@ -31,4 +31,4 @@ def how_to_make_bread():
         print(f"Error invoking llm: {e}")
 
 if __name__ == "__main__":
-    how_to_make_bread()
+    main()

@@ -2,6 +2,8 @@
 
 This project follows the [Python AI Agent From Scratch](https://github.com/techwithtim/PythonAIAgentFromScratch) tutorial by Tech With Tim. It demonstrates how to build a simple AI agent using Python, focusing on core concepts such as environment interaction, agent design, and reinforcement learning basics.
 
+
+
 ## Overview of the agent lifecycle
 
 The agent lifecycle typically consists of the following steps:
@@ -17,7 +19,15 @@ The agent lifecycle typically consists of the following steps:
 This cycle allows the agent to improve its performance over time through continuous interaction and learning.
 
 
-## Overview of tools
+## Tooling used in this project
+
+### LangChain
+
+> [LangChain is a framework for developing applications powered by large language models (LLMs).](https://python.langchain.com/docs/introduction/)
+
+It simplifies and abstracts tasks such as prompt engineering, chaining multiple LLM calls, and connecting to APIs or databases
+
+LangChain is also open source and free to use.
 
 ### Hugging Face 
 
@@ -25,20 +35,34 @@ This cycle allows the agent to improve its performance over time through continu
 
 The API Key is free so this is a convenient source of models to learn on.
 
-### LangChain
-
-> [LangChain is a framework for developing applications powered by large language models (LLMs).](https://python.langchain.com/docs/introduction/)
-
-LangChain is useful for building AI agents that can interact with language models, manage complex workflows, and integrate external data sources. It simplifies tasks such as prompt engineering, chaining multiple LLM calls, and connecting to APIs or databases, making it easier to create robust, production-ready AI applications. 
-
-LangChain is open source, allowing developers to freely use, modify, and contribute to the framework.
 
 
+## Project Overview
 
+I have made some variations from the tutorial's code:
+
+I split the main.py into smaller examples scripts to see how the agent components work.
+
+1.  First simple agent example. This falls under the initialisation step in the lifecycle.
+
+SCRIPT 
+`how_to_make_bread.py`
+
+MODEL 
+Randomly picked model in HuggingFace. According to [Mistral-Nemo-Base-2407 model card ](https://huggingface.co/mistralai/Mistral-Nemo-Base-2407)
+> The Mistral-Nemo-Base-2407 Large Language Model (LLM) is a pretrained generative text model of 12B parameters trained jointly by Mistral AI and NVIDIA
+
+I used a langchain huggingface endpoint to access the model.
+
+PROMPT 
+I used a one line text coded prompt.
+
+OUTPUT 
+The output is printed in the console. See example outputs: `how_to_make_bread.md`
 
 ## Setup
 
-Follow these steps to set up your environment:
+Follow these steps to set up the environment:
 
 1. **Create a virtual environment**:
     ```bash
