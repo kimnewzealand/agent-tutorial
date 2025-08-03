@@ -43,7 +43,8 @@ I have made some variations from the tutorial's code:
 
 I split the main.py into smaller examples scripts to see how the agent components work.
 
-1.  First simple agent example. This falls under the initialisation step in the lifecycle.
+1.  First simple agent example. 
+This falls under the initialisation step in the lifecycle.
 
 SCRIPT 
 `how_to_make_bread.py`
@@ -59,6 +60,28 @@ I used a one line text coded prompt.
 
 OUTPUT 
 The output is printed in the console. See example outputs: `how_to_make_bread.md`
+
+2.  First simple agent chat example. 
+
+The langchain_huggingface library doesn't have a direct equivalent to ChatOpenAI like ChatHuggingFace. This script uses the existing HuggingFaceEndpoint and LangChain's chat message system.
+
+SCRIPT 
+`how_to_make_bread.py`
+
+MODEL 
+Same model and endpoint [Mistral-Nemo-Base-2407 model card ](https://huggingface.co/mistralai/Mistral-Nemo-Base-2407)
+
+
+PROMPT 
+User Input: The script prompts you with input("You: ") and waits for you to type something
+Message Creation: When you type something, the script creates a HumanMessage object to represent your input in the conversation context
+Context Building: This message gets added to the messages list along with previous messages
+Model Processing: The entire conversation (including your input) gets sent to the HuggingFace model
+
+OUTPUT 
+The conversational output is printed in the console. See example outputs: `how_to_make_cake.md`
+
+Although I updated the script to be conversational and respond only to current context it still generated its own Human System conversation.
 
 ## Setup
 
