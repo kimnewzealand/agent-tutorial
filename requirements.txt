@@ -5,3 +5,4 @@ langgraph
 python-dotenv
 pydantic
 pandas
+streamlit
