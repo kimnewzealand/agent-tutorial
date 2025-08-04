@@ -1,0 +1,80 @@
+{
+  "existing_loans": [
+    {
+      "loan_id": "1",
+      "balance": 10000,
+      "rate": 3,
+      "monthly_payment": 30,
+      "loan_type": "Principal & Interest",
+      "due_date": "2036-07-25",
+      "remaining_months": 131
+    },
+    {
+      "loan_id": "2",
+      "balance": 10000,
+      "rate": 3,
+      "monthly_payment": 30,
+      "loan_type": "Principal & Interest",
+      "due_date": "2036-06-23",
+      "remaining_months": 130
+    },
+    {
+      "loan_id": "3",
+      "balance": 10000,
+      "rate": 6,
+      "monthly_payment": 60,
+      "loan_type": "Interest Only",
+      "due_date": "2047-12-04",
+      "remaining_months": 204
+    },
+    {
+      "loan_id": "4",
+      "balance": 10000,
+      "rate": 6,
+      "monthly_payment": 60,
+      "loan_type": "Principal & Interest",
+      "due_date": "2036-06-23",
+      "remaining_months": 130
+    }
+  ],
+  "restructure_options": [
+    {
+      "option_id": "REFI001",
+      "term_months": 65, 
+      "loan_type": "Consolidated Fixed Rate",
+      "description": "Consolidate all loans into two fixed rate mortgages"
+    },
+    {
+      "option_id": "REFI002",
+      "term_months": 130, 
+      "loan_type": "Consolidated Fixed Rate",
+      "description": "Consolidate all loans into two fixed rate mortgages"
+    },
+    {
+      "option_id": "REFI003",
+      "term_months": 195,
+      "loan_type": "Consolidated Fixed Rate",
+      "description": "Consolidate all loans into two fixed rate mortgages"
+    }
+  ],
+  "client_info": {
+
+  },
+  "market_conditions": {
+    "current_rates": {
+      "floating": 6,
+      "flexi": 6,
+      "offset": 6,
+      "6_months_fixed": 5,
+      "12_months_fixed": 4,
+      "18_months_fixed": 4,
+      "24_months_fixed": 4,
+      "36_months_fixed": 4,
+      "48_months_fixed": 5,
+      "60_months_fixed": 5
+    },
+    "rate_trend": "increasing",
+    "market_volatility": "moderate"
+  }
+}
+ 

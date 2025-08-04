@@ -1,6 +1,7 @@
 langchain 
-wikipedia 
 langchain-huggingface
+langchain_anthropic
+langgraph
 python-dotenv
 pydantic
-duckduckgo-search
+pandas

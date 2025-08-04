@@ -156,6 +156,11 @@ A comprehensive glossary of artificial intelligence and agent-related terms with
 
 **Source**: Brown, T., et al. (2020). "Language Models are Few-Shot Learners." *Advances in Neural Information Processing Systems*, 33, 1877-1901.
 
+### **Temperature**
+**Definition**: A parameter that controls the randomness of a language model's output. Lower values (e.g., 0.1) make the model more deterministic and focused, while higher values (e.g., 1.0) increase diversity and creativity in the generated text.
+
+**Source**: OpenAI. (2023). "How sampling temperature works." https://platform.openai.com/docs/guides/text-generation/parameters#temperature
+
 ## 🔧 **Tools and Integration**
 
 ### **Web Scraping**
@@ -177,6 +182,26 @@ A comprehensive glossary of artificial intelligence and agent-related terms with
 **Definition**: A technique used to control the rate of requests a client can make to an API within a specified time period.
 
 **Source**: Fielding, R. T., & Taylor, R. N. (2000). "Architectural Styles and the Design of Network-based Software Architectures." *Doctoral Dissertation*, University of California, Irvine.
+
+### **Lossy**
+**Definition**: A term describing data compression or processing that permanently removes some information, resulting in a reduction in quality or fidelity that cannot be fully recovered.
+
+**Source**: Sayood, K. (2017). *Introduction to Data Compression* (5th ed.). Morgan Kaufmann.
+
+### **Software 1.0**
+**Definition**: Traditional software development where programmers write explicit rules and logic to solve specific problems, with all behavior hardcoded by developers.
+
+**Source**: Karpathy, A. (2023). "Software 2.0." *Andrej Karpathy's Blog*. https://karpathy.medium.com/software-2-0-a64152b37c35
+
+### **Software 2.0**
+**Definition**: Software development paradigm where neural networks learn patterns from data rather than following explicit rules, with behavior emerging from training rather than being explicitly programmed.
+
+**Source**: Karpathy, A. (2023). "Software 2.0." *Andrej Karpathy's Blog*. https://karpathy.medium.com/software-2-0-a64152b37c35
+
+### **Software 3.0**
+**Definition**: The emerging paradigm where natural language becomes the primary programming interface, with large language models translating human intent into executable code and systems.
+
+**Source**: Karpathy, A. (2023). "Software Is Changing (Again)." *YouTube*. https://www.youtube.com/watch?v=LCEmiRjPEtQ
 
 ---
 
