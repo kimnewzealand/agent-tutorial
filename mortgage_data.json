@@ -37,29 +37,7 @@
       "remaining_months": 130
     }
   ],
-  "restructure_options": [
-    {
-      "option_id": "REFI001",
-      "term_months": 65, 
-      "loan_type": "Consolidated Fixed Rate",
-      "description": "Consolidate all loans into two fixed rate mortgages"
-    },
-    {
-      "option_id": "REFI002",
-      "term_months": 130, 
-      "loan_type": "Consolidated Fixed Rate",
-      "description": "Consolidate all loans into two fixed rate mortgages"
-    },
-    {
-      "option_id": "REFI003",
-      "term_months": 195,
-      "loan_type": "Consolidated Fixed Rate",
-      "description": "Consolidate all loans into two fixed rate mortgages"
-    }
-  ],
-  "client_info": {
-
-  },
+  "user_goals": {"primary_goal": "monthly_savings"},
   "market_conditions": {
     "current_rates": {
       "floating": 6,

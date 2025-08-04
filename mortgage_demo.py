@@ -1,125 +1,197 @@
 import json
-from mortgage_langgraph_agent import run_mortgage_analysis, interactive_mortgage_agent
+import logging
+import sys
+from pathlib import Path
+from typing import Optional, Dict, Any, List
+from dataclasses import dataclass
+from mortgage_langgraph_agent import (
+    interactive_mortgage_agent,
+    analyze_current_loans, 
+    generate_comparisons
+)
+from langchain.schema import SystemMessage
 
-def load_mortgage_data(filename: str) -> dict:
-    """Load mortgage data"""
-    try:
-        with open(filename, 'r') as file:
-            print(f" File {filename} loaded successfully")
-            return json.load(file)
-    except FileNotFoundError:
-        print(f"❌ File {filename} not found")
-        return None
-    except json.JSONDecodeError:
-        print(f"❌ Invalid JSON in {filename}")
-        return None
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
-def show_all_options(state):
-    """Show all restructuring options with their descriptions from the JSON"""
-    print("\n📋 ALL RESTRUCTURING OPTIONS FROM FILE:")
-    print("=" * 60)
+# ============================================================================
+# UTILITY FUNCTIONS (Lowest level - used by other functions)
+# ============================================================================
+
+def load_mortgage_data(filename: str) -> Optional[Dict[str, Any]]:
+    """Load mortgage data from JSON file.
     
-    options = state.get("restructure_options", [])
-    if not options:
-        print("❌ No restructuring options found in the data")
+    Args:
+        filename: Path to the JSON file containing mortgage data
+        
+    Returns:
+        Dictionary containing mortgage data or None if loading fails
+        
+    Raises:
+        FileNotFoundError: If the file doesn't exist
+        json.JSONDecodeError: If the file contains invalid JSON
+    """
+    file_path = Path(filename)
+    
+    if not file_path.exists():
+        logging.error(f"❌ Mortgage data file not found: {filename}")
+        return None
+    
+    if not file_path.is_file():
+        logging.error(f"❌ Path is not a file: {filename}")
+        return None
+    
+    try:
+        with file_path.open('r', encoding='utf-8') as file:
+            data = json.load(file)
+            logging.info(f"✅ Successfully loaded mortgage data from {filename}")
+            return data
+            
+    except json.JSONDecodeError as e:
+        logging.error(f"❌ Invalid JSON format in {filename}: {e}")
+        return None
+    except PermissionError:
+        logging.error(f"❌ Permission denied accessing {filename}")
+        return None
+    except Exception as e:
+        logging.error(f"❌ Unexpected error loading {filename}: {e}")
+        return None
+
+# ============================================================================
+# CORE BUSINESS LOGIC (Middle level - main functionality)
+# ============================================================================
+
+def demo_workflow_steps(mortgage_data: Dict[str, Any]) -> None:
+    """Demonstrate individual workflow steps with proper error handling.
+    
+    Args:
+        mortgage_data: Dictionary containing mortgage data
+        
+    Returns:
+        None
+    """
+    # Initialize state with proper validation
+    try:
+        state = {
+            "messages": [SystemMessage(content="Home owner analyzing loan data.")],
+            "current_loans": mortgage_data.get("existing_loans", []),
+            "market_conditions": mortgage_data.get("market_conditions", {}),
+            "user_goals": mortgage_data.get("user_goals", {}),
+            "analysis_results": {},
+            "comparisons": {},
+
+        }
+    except KeyError as e:
+        logging.error(f"❌ Missing required data in mortgage_data: {e}")
         return
     
-    for i, option in enumerate(options, 1):
-        print(f"\n{i}. {option.get('option_id', 'N/A')} - {option.get('loan_type', 'N/A')}")
-        print(f"   📝 Description: {option.get('description', 'No description available')}")
-        print(f"   ⏱️  Term: {option.get('term_months', 'N/A')} months ({option.get('term_months', 0)/12:.1f} years)")
-        
-        # Show additional fields if they exist
-        if 'balance' in option:
-            print(f"   💰 Balance: ${option['balance']:,.2f}")
-        if 'rate' in option:
-            print(f"   📊 Rate: {option['rate']}%")
-
-    
-    print("\n" + "=" * 60)
-
-def demo_workflow_steps():
-    """Demonstrate individual workflow steps"""
-
-    
-    from mortgage_langgraph_agent import (
-        analyze_current_loans, 
-        analyze_restructure_options, 
-        compare_scenarios, 
-        generate_comparisons
-    )
-    
-    # Initialize state
-    from mortgage_langgraph_agent import MortgageState
-    from langchain.schema import SystemMessage
-    
-    state = {
-        "messages": [SystemMessage(content="Home owner analyzing loan data.")],
-        "current_loans": mortgage_data["existing_loans"],
-        "restructure_options": mortgage_data["restructure_options"],
-        "analysis_results": {},
-        "comparisons": {},
-        "user_goals": {"primary_goal": "monthly_savings"}
-    }
-    
     # Step 1: Analyze current loans
-    print("\n Step 1️⃣: Analyzing Current Loans")
-    state = analyze_current_loans(state)
-    if "current_loans" in state["analysis_results"]:
-        current = state["analysis_results"]["current_loans"]
-        print(f"   ✅ Total Balance: ${current['total_balance']:,.2f}")
-        print(f"   ✅ Monthly Payment: ${current['total_monthly_payment']:,.2f}")
-    else:
-        print("❌ No current loans found")
-
-    print("\nStep 2️⃣ : Analyzing Restructuring Options")
-    show_all_options(state) 
-    state = analyze_restructure_options(state)     
-    print("\nStep 3️⃣ : Comparing Scenarios")
-    state = compare_scenarios(state)
-    if "comparison" in state["analysis_results"]:
-        comparison = state["analysis_results"]["comparison"]
-        savings = comparison["savings"]["monthly"]
-        print(f"   ✅ Monthly Savings: ${savings:,.2f}")
-    
-    # Step 4: Generate comparisons
-    print("\n Step 4️⃣ : Generating comparisons")
-    state = generate_comparisons(state)
-    # Print the generated comparisons in a readable way
-    if state["comparisons"] is not None:
-        print("\n📝 Comparisons Analysis:")
-        import json
-        print(json.dumps(state["comparisons"], indent=2))
-
-    else:
-        print("❌ No comparisons analysis found.")
+    print("\n1️⃣ Step 1: Analyzing Current Loans")
+    try:
+        state = analyze_current_loans(state)
+        if current_loans := state.get("analysis_results", {}).get("current_loans"):
+            total_balance = current_loans['total_balance']
+            total_monthly_payment = current_loans['total_monthly_payment']
+            print(f"   ✅ Current Total Balance: ${total_balance:,.2f}")
+            print(f"   ✅ Current Monthly Payment: ${total_monthly_payment:,.2f}")
+        else:
+            print("❌ No current loans found")
+    except Exception as e:
+        logging.error(f"❌ Error in step 1: {e}")
 
     
+    # Step 2: Generate comparisons
+    print("\n2️⃣ Step 2: Generating Comparisons")
+    try:
+        state = generate_comparisons(state)
+        if comparisons := state.get("comparisons"):
+            print("\n📝 Comparisons Analysis:")
+            # Print the comparison analysis in a human-readable way
+            analysis = comparisons.get('analysis')
+            if hasattr(analysis, "content"):
+                # If the analysis is an AIMessage or similar object
+                print(analysis.content)
+            elif isinstance(analysis, dict):
+                # If the analysis is a dict, pretty print it
+                import json
+                print(json.dumps(analysis, indent=2))
+            else:
+                # Otherwise, just print as string
+                print(str(analysis))
+        else:
+            print("❌ No comparisons analysis found.")
+    except Exception as e:
+        logging.error(f"❌ Error in step 3: {e}")
+
     print("\n✅ Demo completed! You can now run the interactive agent with:")
     print("python mortgage_langgraph_agent.py")
-    exit()
 
+# ============================================================================
+# USER INTERFACE FUNCTIONS (Higher level - user interaction)
+# ============================================================================
 
+def get_filename() -> str:
+    """Get filename from user with default fallback.
+    
+    Returns:
+        Filename as string
+    """
+    try:
+        filename = input("Enter the filename of the mortgage data (or press Enter for default 'mortgage_data.json'): ").strip()
+        return filename if filename else "mortgage_data.json"
+    except (EOFError, KeyboardInterrupt):
+        print("\n👋 Goodbye!")
+        sys.exit(0)
 
-if __name__ == "__main__":
+def get_user_choice() -> str:
+    """Get user choice for demo options.
+    
+    Returns:
+        User's choice as a string
+    """
     print("🏠 LangGraph Mortgage Agent Demo")
     print("=" * 40)
     print("Choose an option:")
     print("1. Run automated demos")
     print("2. Start interactive agent")
     print("3. Run demos + interactive agent")
-    choice = input("\nEnter your choice (1, 2 or 3): ").strip()
-    filename = input("Enter the filename of the mortgage data (or press Enter for default 'mortgage_data.json'): ").strip()
-    if not filename:
-        filename = "mortgage_data.json"
-    mortgage_data = load_mortgage_data(filename)
-    if choice == "1" or choice == "3":
-        demo_workflow_steps()
-    if choice == "2" or choice == "3":
-        print("\n🚀 Starting Interactive Mortgage Agent...")
-        interactive_mortgage_agent()
-    else:
-        print("❌ Invalid choice. Showing options...")
-        mortgage_data = load_mortgage_data('mortgage_data.json')
-        if mortgage_data:
-            show_all_options(mortgage_data) 
+    
+    while True:
+        try:
+            choice = input("\nEnter your choice (1, 2, or 3): ").strip()
+            if choice in {"1", "2", "3"}:
+                return choice
+            print("❌ Invalid choice. Please enter 1, 2, or 3.")
+        except (EOFError, KeyboardInterrupt):
+            print("\n👋 Goodbye!")
+            sys.exit(0)
+
+# ============================================================================
+# MAIN FUNCTION (Entry point)
+# ============================================================================
+
+def main() -> None:
+    """Main function to run the mortgage agent demo."""
+    try:
+        choice = get_user_choice()
+        filename = get_filename()
+        
+        mortgage_data = load_mortgage_data(filename)
+        if not mortgage_data:
+            logging.error("❌ Failed to load mortgage data. Exiting.")
+            return
+        
+        if choice in {"1", "3"}:
+            demo_workflow_steps(mortgage_data)
+        
+        if choice in {"2", "3"}:
+            print("\n🚀 Starting Interactive Mortgage Agent...")
+            interactive_mortgage_agent()
+            
+    except KeyboardInterrupt:
+        print("\n👋 Demo interrupted. Goodbye!")
+    except Exception as e:
+        logging.error(f"❌ Unexpected error: {e}")
+
+if __name__ == "__main__":
+    main()
