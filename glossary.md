@@ -161,6 +161,21 @@ A comprehensive glossary of artificial intelligence and agent-related terms with
 
 **Source**: OpenAI. (2023). "How sampling temperature works." https://platform.openai.com/docs/guides/text-generation/parameters#temperature
 
+### **Hallucination**
+**Definition**: When an AI model generates information that appears plausible but is factually incorrect, not supported by its training data, or contradicts known facts.
+
+**Source**: Ji, Z., et al. (2023). "Survey of Hallucination in Natural Language Generation." *ACM Computing Surveys*, 55(12), 1-38.
+
+### **Few-Shot Learning**
+**Definition**: A machine learning approach where a model learns to perform a task with only a few examples, typically by providing examples in the prompt rather than through extensive training.
+
+**Source**: Brown, T., et al. (2020). "Language Models are Few-Shot Learners." *Advances in Neural Information Processing Systems*, 33, 1877-1901.
+
+### **Prompt**
+**Definition**: The input text or instructions given to a language model to guide its response generation, including context, examples, and specific requests.
+
+**Source**: Liu, P., et al. (2023). "Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing." *ACM Computing Surveys*, 55(9), 1-35.
+
 ## 🔧 **Tools and Integration**
 
 ### **Web Scraping**
@@ -172,6 +187,26 @@ A comprehensive glossary of artificial intelligence and agent-related terms with
 **Definition**: An organized collection of structured information or data, typically stored electronically in a computer system.
 
 **Source**: Date, C. J. (2003). *An Introduction to Database Systems* (8th ed.). Addison-Wesley.
+
+### **Index/Indexes**
+**Definition**: Data structures that improve the speed of data retrieval operations on a database table or collection by creating shortcuts to specific data locations, similar to an index in a book.
+
+**Source**: Ramakrishnan, R., & Gehrke, J. (2003). *Database Management Systems* (3rd ed.). McGraw-Hill.
+
+### **Vector Database**
+**Definition**: A specialized database designed to store, index, and query high-dimensional vector embeddings, commonly used in AI applications for similarity search and retrieval-augmented generation (RAG).
+
+**Source**: Pinecone. (2023). *Vector Database Documentation*. https://docs.pinecone.io/
+
+### **Embedding**
+**Definition**: A dense vector representation of data (text, images, etc.) that captures semantic meaning in a high-dimensional space, enabling mathematical operations and similarity comparisons.
+
+**Source**: Mikolov, T., et al. (2013). "Efficient Estimation of Word Representations in Vector Space." *arXiv preprint arXiv:1301.3781*.
+
+### **Retrieval-Augmented Generation (RAG)**
+**Definition**: A technique that combines information retrieval with language generation, allowing models to access external knowledge sources to provide more accurate and up-to-date responses.
+
+**Source**: Lewis, P., et al. (2020). "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks." *Advances in Neural Information Processing Systems*, 33, 9459-9474.
 
 ### **API Key**
 **Definition**: A unique identifier used to authenticate and authorize access to an API, typically required for security and usage tracking.

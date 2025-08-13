@@ -288,9 +288,9 @@ def main():
             Based on your current mortgage situation and goals, here are the key recommendations:
             
             **Current Situation:**
-            - Total Balance: $550,000
-            - Monthly Payment: $3,913
-            - Average Rate: 6.9%
+            - Total Balance: $10,000
+            - Monthly Payment: $1,000
+            - Average Rate: 3%
             
             **Recommended Strategy:**
             1. **Conservative Approach**: Consider a 24-month fixed rate to reduce monthly payments

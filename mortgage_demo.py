@@ -2,8 +2,7 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Optional, Dict, Any, List
-from dataclasses import dataclass
+from typing import Optional, Dict, Any
 from mortgage_langgraph_agent import (
     interactive_mortgage_agent,
     analyze_current_loans, 

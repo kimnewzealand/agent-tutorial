@@ -1,8 +1,6 @@
-langchain 
+langchain
 langchain-huggingface
 langchain_anthropic
-langgraph
 python-dotenv
 pydantic
-pandas
 streamlit
