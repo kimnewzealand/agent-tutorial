@@ -76,8 +76,6 @@ def generate_comparisons(state: MortgageState) -> MortgageState:
         return state
 
     try:
-
-
         # Create LLM for comparisons
         api_token = os.getenv("ANTHROPIC_API_KEY")
         
@@ -85,7 +83,6 @@ def generate_comparisons(state: MortgageState) -> MortgageState:
             print("❌ ANTHROPIC_API_KEY not found in environment variables")
             state["messages"].append(AIMessage(content="Error: ANTHROPIC_API_KEY not configured"))
             return state
-        
         
         llm = ChatAnthropic(
             model="claude-3-5-sonnet-20240620",
@@ -133,7 +130,6 @@ def generate_comparisons(state: MortgageState) -> MortgageState:
             sixty_month_rate = current_rates['60_months_fixed']
             flexi_rate = current_rates['flexi']
             offset_rate = current_rates['offset']
-            
             user_goals = context['user_goals']
             prompt = f"""Based on the following mortgage analysis, provide comparisons of combinations of two different rates and terms:
 

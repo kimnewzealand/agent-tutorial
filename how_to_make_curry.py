@@ -1,10 +1,8 @@
 import os
 from dotenv import load_dotenv
 from langchain_huggingface import HuggingFaceEndpoint
-from langchain.schema import HumanMessage, SystemMessage, AIMessage
-from langchain.agents import initialize_agent, AgentType, Tool
+from langchain.agents import initialize_agent, AgentType
 from langchain.tools import BaseTool
-from typing import Optional
 from pydantic import BaseModel, Field
 
 load_dotenv()

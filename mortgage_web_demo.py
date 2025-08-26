@@ -15,13 +15,14 @@ from mortgage_langgraph_agent import (
 )
 from langchain.schema import SystemMessage
 
-# Page configuration
-st.set_page_config(
-    page_title="🏠 Mortgage Restructuring Agent",
-    page_icon="��",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+def configure_streamlit_page():
+    """Configure Streamlit page settings - only call when in Streamlit context."""
+    st.set_page_config(
+        page_title="🏠 Mortgage Restructuring Agent",
+        page_icon="🏠",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
 
 # Custom CSS for better styling
 st.markdown("""
@@ -161,6 +162,13 @@ def run_analysis(mortgage_data: Dict[str, Any], user_goals: Dict[str, Any]):
         return None
 
 def main():
+    # Configure Streamlit page (only when in proper context)
+    try:
+        configure_streamlit_page()
+    except Exception:
+        # If page config fails, continue without it
+        pass
+
     # Main header
     st.markdown('<h1 class="main-header">🏠 Mortgage Restructuring Agent</h1>', unsafe_allow_html=True)
     
@@ -303,5 +311,25 @@ def main():
             - Consult with your mortgage advisor
             """)
 
+# Only run main() when executed as a Streamlit app
 if __name__ == "__main__":
-    main() 
+    # Check if we're running in Streamlit context
+    try:
+        # This will only work if we're in a Streamlit context
+        import streamlit.runtime.scriptrunner as scriptrunner
+        if scriptrunner.get_script_run_ctx() is not None:
+            main()
+        else:
+            # Running outside Streamlit context (e.g., direct Python execution)
+            print("This script is designed to run with Streamlit.")
+            print("Please run: streamlit run mortgage_web_demo.py")
+    except (ImportError, AttributeError):
+        # Fallback for older Streamlit versions or when not in Streamlit context
+        try:
+            import streamlit as st
+            # Try to access Streamlit's session state to check if we're in context
+            _ = st.session_state
+            main()
+        except Exception:
+            print("This script is designed to run with Streamlit.")
+            print("Please run: streamlit run mortgage_web_demo.py")
