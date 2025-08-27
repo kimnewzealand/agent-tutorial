@@ -67,23 +67,39 @@ def calculate_restructure_options(current_analysis: str, market_rates: str, user
         goals = json.loads(user_goals)
 
         current_balance = analysis.get('total_balance', 0)
-        current_payment = analysis.get('total_monthly_payment', 0)
+        # Try multiple possible keys for current payment
+        current_payment = (analysis.get('total_monthly_payment', 0) or
+                          analysis.get('total_monthly_payments', 0) or
+                          analysis.get('current_monthly_payment', 0))
+
+
 
         # Divide into 2 equal loans
         loan_amount = current_balance / 2
 
-        # Available rate types
-        rate_types = ['floating', '6_months_fixed', '12_months_fixed', '18_months_fixed',
-                     '24_months_fixed', '36_months_fixed', '48_months_fixed', '60_months_fixed']
+        # Available rate types (matching the actual keys in market data)
+        rate_types = ['floating', 'flexi', 'offset', '6_months_fixed', '12_months_fixed',
+                     '18_months_fixed', '24_months_fixed', '36_months_fixed', '48_months_fixed', '60_months_fixed']
 
-        # Get available rates
+        # Get available rates - handle both formats
         available_rates = {}
+
+        # Check if rates are nested under 'current_rates' or at the top level
+        if 'current_rates' in rates:
+            current_rates = rates['current_rates']
+        else:
+            current_rates = rates
+
         for rate_type in rate_types:
-            if rate_type in rates.get('current_rates', {}):
-                available_rates[rate_type] = rates['current_rates'][rate_type]
+            if rate_type in current_rates:
+                available_rates[rate_type] = current_rates[rate_type]
+
+
 
         # Generate combinations of 2 loans with different rate combinations
         combinations = []
+
+
 
         for rate1_type, rate1_value in available_rates.items():
             for rate2_type, rate2_value in available_rates.items():
@@ -132,6 +148,8 @@ def calculate_restructure_options(current_analysis: str, market_rates: str, user
 
                 combinations.append(combination)
 
+
+
         # Sort by monthly savings (descending) and remove duplicates
         combinations.sort(key=lambda x: x['monthly_savings'], reverse=True)
 
@@ -146,6 +164,8 @@ def calculate_restructure_options(current_analysis: str, market_rates: str, user
                 seen_combinations.add(rate_pair)
                 unique_combinations.append(combo)
 
+
+
         result = {
             "current_situation": {
                 "total_balance": current_balance,
@@ -157,7 +177,7 @@ def calculate_restructure_options(current_analysis: str, market_rates: str, user
                 "loan2_amount": loan_amount,
                 "total_amount": current_balance
             },
-            "top_combinations": unique_combinations[:10],  # Top 10 unique combinations
+            "top_combinations": unique_combinations[:15],  # Top 15 unique combinations
             "user_goals": goals
         }
 
