@@ -124,28 +124,41 @@ The conversational output is printed in the console. See example outputs: `how_t
 
 Verbose Mode: Shows the agent's thinking process
 
-4.  Advanced LangGraph mortgage agent example.
+4.  Mortgage agent example.
 
-`mortgage_langgraph_agent.py` script that implements a more sophisticated agent workflow for Mortgage Comparison Analysis.
+`mortgage_agent.py` script that implements a different agent workflow for Mortgage Comparison Analysis.
 
-**SCRIPT** 
+**SCRIPTS** 
 `mortgage_web_demo.py`
+`mortgage_agent.py` 
 
-**AGENT**
-- LangGraph Agent: Uses StateGraph for structured workflow management.
-- State Management: Persistent data throughout the workflow with TypedDict
+**AGENTS**
+
+Use the [smolagents library having the tool calling LLMs in code rather than JSON like other agent libraries](https://huggingface.co/blog/smolagents#introducing-smolagents-making-agents-simple-%F0%9F%A5%B3).
+
+It will also use the think, act and observe cycle.
+
+The agent uses smolagents' CodeAgent which combines:
+
+Tool calling (function calling)
+Code execution capabilities
+Multi-step reasoning
 
 **LLM MODEL** 
-Claude-3-Sonnet-20240229 via ChatAnthropic for generating comparisons.
+claude-3-5-sonnet-20240620 via LiteLLMModel class
+
+The LiteLLMModel class is specifically designed to work with models that are hosted locally using the Ollama framework. This allows for faster inference times and reduced latency.
+
+An alternative class is to use the InferenceClientModel which can work with any model hosted on HuggingFace, AWS, or other endpoints.
 
 **TOOLS**
 
-- Custom Tools: Specialized tools for loan analysis, restructuring options, and comparisons
+1. **`analyze_loan_data`**: Analyzes existing mortgage loans
+2. **`calculate_restructure_options`**: Calculates potential restructuring scenarios
 
 **PROMPT**
 
-This uses a custom prompt instead of a standard agent prompt template like ReAct or Zero-Shot ReAct. Instead, it builds a detailed, context-rich prompt for the LLM
-- Interactive Interface: User-friendly console interface with goal-based analysis
+This uses agent prompting that combines structured task decomposition with tool-directed execution and context-rich data provision.
 
 **OUTPUT** 
 Comprehensive mortgage analysis with personalized comparisons. Run demo: `streamlit run mortgage_web_demo.py`

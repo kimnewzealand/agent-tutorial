@@ -1,6 +1,7 @@
 langchain
 langchain-huggingface
-langchain_anthropic
+smolagents
 python-dotenv
 pydantic
 streamlit
+litellm

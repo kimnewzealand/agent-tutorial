@@ -9,11 +9,10 @@ import os
 # Add the current directory to Python path to import our modules
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from mortgage_langgraph_agent import (
+from mortgage_agent import (
     analyze_current_loans,
     generate_comparisons
 )
-from langchain.schema import SystemMessage
 
 def configure_streamlit_page():
     """Configure Streamlit page settings - only call when in Streamlit context."""
@@ -108,30 +107,12 @@ def display_current_loans(loans_data: list):
         avg_rate = sum(loan.get('rate', 0) * loan.get('balance', 0) for loan in loans_data) / total_balance if total_balance > 0 else 0
         st.metric("📊 Weighted Avg Rate", f"{avg_rate:.3f}%")
 
-def display_restructure_options(options_data: list):
-    """Display restructuring options."""
-    if not options_data:
-        st.warning("No restructuring options found.")
-        return
-    
-    st.subheader("🔄 Restructuring Options")
-    
-    # Create DataFrame
-    options_df = pd.DataFrame(options_data)
-    
-    # Display as a table
-    st.dataframe(
-        options_df,
-        use_container_width=True,
-        hide_index=True
-    )
-
 def run_analysis(mortgage_data: Dict[str, Any], user_goals: Dict[str, Any]):
     """Run the mortgage analysis workflow."""
     try:
         # Initialize state
         state = {
-            "messages": [SystemMessage(content="Home owner analyzing loan data.")],
+            "messages": ["Home owner analyzing loan data."],
             "current_loans": mortgage_data.get("existing_loans", []),
             "market_conditions": mortgage_data.get("market_conditions", {}),
             "user_goals": user_goals,
@@ -145,7 +126,7 @@ def run_analysis(mortgage_data: Dict[str, Any], user_goals: Dict[str, Any]):
         
         if "current_loans" in state.get("analysis_results", {}):
             current_loans = state["analysis_results"]["current_loans"]
-            st.success(f"✅ Analysis complete! Total balance: ${current_loans.get('total_balance', 0):,.2f}")
+            st.success(f"✅ Analysis complete! Verifying Total balance: ${current_loans.get('total_balance', 0):,.2f}")
         
         # Step 2: Generate comparisons
         with st.spinner("🤖 Generating personalized comparisons..."):
@@ -187,19 +168,13 @@ def main():
         st.subheader("🎯 Your Goals")
         primary_goal = st.selectbox(
             "Primary Goal:",
-            ["monthly_savings", "total_savings", "equity_building", "risk_reduction"],
+            ["interest_rate_hedging", "paying_off_loan"],
             format_func=lambda x: x.replace("_", " ").title()
-        )
-        
-        risk_tolerance = st.selectbox(
-            "Risk Tolerance:",
-            ["low", "moderate", "high"],
-            format_func=lambda x: x.title()
         )
         
         time_horizon = st.selectbox(
             "Time Horizon:",
-            ["short_term", "medium_term", "long_term"],
+            ["5_years", "10_years", "25_years"],
             format_func=lambda x: x.replace("_", " ").title()
         )
         
@@ -224,13 +199,9 @@ def main():
             # Display current loans
             display_current_loans(mortgage_data.get("existing_loans", []))
             
-            # Display restructuring options
-            display_restructure_options(mortgage_data.get("restructure_options", []))
-            
             # Prepare user goals
             user_goals = {
                 "primary_goal": primary_goal,
-                "risk_tolerance": risk_tolerance,
                 "time_horizon": time_horizon,
                 "additional_considerations": additional_notes
             }
@@ -257,11 +228,6 @@ def main():
             
             # Reset analysis flag
             st.session_state.run_analysis = False
-            
-            # Add a button to run another analysis
-            if st.button("🔄 Run Another Analysis"):
-                st.session_state.run_analysis = True
-                st.rerun()
     
     else:
         # Welcome message and instructions
@@ -273,7 +239,7 @@ def main():
         ### 📋 What you can do:
         - **Analyze Current Loans**: Get a detailed breakdown of your existing mortgage situation
         - **Compare Options**: See how different restructuring options stack up
-        - **AI Recommendations**: Get personalized advice based on your goals and risk tolerance
+        - **AI Recommendations**: Get personalized recommendations based on your goals
         
         ### �� How to get started:
         1. **Configure your preferences** in the sidebar
@@ -283,9 +249,8 @@ def main():
         
         ### 💡 Tips for best results:
         - Be specific about your goals
-        - Consider your risk tolerance
         - Think about your time horizon
-        - Add any special considerations in the notes
+        - Add any special considerations in the notes section
         """)
         
         # Quick demo section
